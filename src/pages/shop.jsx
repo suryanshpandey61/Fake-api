@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+
+
 function shop() {
   //loading
   const [loader, setLoader] = useState(false);
@@ -16,7 +18,10 @@ function shop() {
   //seleted category use state
   const [selectedCategory,setSelectedCategory] = useState(null);
 
-  //  useeffect hook for all category
+  //add to cart use state
+  const [cart,setCart] = useState([]);
+
+  //  useeffect hook for all products
   //useEffect hook use to render components
   useEffect(() => {
     const fetchAllProducts = async () => {
@@ -43,16 +48,14 @@ function shop() {
   //useeffect for all category
   useEffect(() => {
     const fetchAllCategory = async () => {
-      setLoader(true);
+      
       try {
         const response = await fetch("https://fakestoreapi.com/products/categories");
         const categories = await response.json();
-        setCategory(categories);
+        setCategory(["All Products",...categories]);
       } catch (error) {
         console.error("Error fetching categories:", error);
-      } finally {
-        setLoader(false);
-      }
+      } 
     };
     fetchAllCategory();
   }, []);
@@ -62,7 +65,7 @@ function shop() {
     setSelectedCategory(category);
 
     // if koi category select nhi hai to all product show kr do
-    if(category===null){
+    if(category==="All Products"){
       setFilterData(allProducts);
     }
     else 
@@ -74,6 +77,27 @@ function shop() {
 
   console.log(filteredData);
 
+  const cartHandler = (id) => {
+
+    
+
+    const product = allProducts.find(item=> item.id === id);
+
+    if (product && !cart.some(item => item.id === id)) {
+
+      // ... spread operator use to store previous state
+      setCart(prevCart => [...prevCart, product]);
+      
+    }
+
+    
+  }
+
+
+  
+
+
+
   return (
     <div className="flex shop-div">
       {/* // category wali div  */}
@@ -81,8 +105,10 @@ function shop() {
       <div className="w-[200px] mt-8">
         <p className="text-black text-2xl font-bold">Category</p>
 
+        
+
         {loader ? (
-          <div className="loader">loader</div>
+          <div className="loader"></div>
         ) : (
           category.map((item, index) => (
             <div className="text-xl mt-1 font-semibold gap-y-8 capitalize hover:cursor-pointer border border-slate-700"
@@ -99,7 +125,7 @@ function shop() {
       <div className="grid grid-cols-3 w-full  space-x-5 mx-auto mb-5 ">
         {/* all product wala div */}
         {loader ? (
-          <div className="loader">loader</div>
+          <div className="loader"></div>
         ) : (
 
         //  sara data filtered data me hai 
@@ -118,8 +144,11 @@ function shop() {
               </p>
               <div className="flex justify-between">
                 <p className="text-green-600 font-medium">${item.price}</p>
-                <button className="border border-black rounded-md px-6 py-2 hover:text-white hover:bg-black transition-all duration-500">
+                <button 
+                onClick={()=>cartHandler(item.id)}
+                className="border border-black rounded-md px-6 py-2 hover:text-white hover:bg-black transition-all duration-500">
                   Add to Cart
+                  
                 </button>
               </div>
             </div>

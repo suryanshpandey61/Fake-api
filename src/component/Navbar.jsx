@@ -21,17 +21,19 @@ function Navbar() {
         </Link>
       </div>
 
-      <div>
-        <Link to="/cart" className='text-4xl text-slate-300 hover:underline transition-all duration-500 font-bold'>
-         Cart
-        </Link>
-      </div>
+     
 
       <div>  
         <Link to="/admin" className='text-4xl hover:underline transition-all duration-500 text-slate-300 font-bold'>
           Admin
         </Link>
      </div>
+
+     <div>
+        <Link to="/cart" className='text-4xl text-slate-300 hover:underline transition-all duration-500 font-bold'>
+         Cart
+        </Link>
+      </div>
 </div>
      
 
